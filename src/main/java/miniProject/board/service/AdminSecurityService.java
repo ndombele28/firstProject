@@ -8,8 +8,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,20 +15,19 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-
-public class AdminService {
+public class AdminSecurityService implements UserDetailsService {
     private final AdminRepository adminRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public Admin create(String name, String password){
-        Admin admin = new Admin();
-        admin.setName(name);
-        admin.setPassword(passwordEncoder.encode(password));
-        this.adminRepository.save(admin);
-        return admin;
-    }
+    @Override
+    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
+        Optional<Admin> _admin = this.adminRepository.findByName(name);
+        if (_admin.isEmpty()){
+            throw new UsernameNotFoundException("계정을 찾을 수 없습니다.");
+        }
+        Admin admin = _admin.get();
 
-    public boolean isEmpty() {
-        return adminRepository.count() == 0;
+        return User.withUsername(admin.getName())
+                .password(admin.getPassword())
+                .build();
     }
 }
