@@ -7,6 +7,12 @@
 <body>
 <h1>Login</h1>
 <form th:action="@{/admin/login}" method="post">
+    <div th:if="${param.error}">
+        <div>
+            Name 또는 Password를 확인해 주세요.
+        </div>
+    </div>
+
     <div>
         <label for="name">Name:</label>
         <input type="text" id="name" name="name"/>
