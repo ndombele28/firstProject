@@ -27,7 +27,7 @@ public class AdminSecurityConfig {
                         .addHeaderWriter(new XFrameOptionsHeaderWriter(
                                 XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))) // H2 콘솔 UI 구조 허용
                 .formLogin((formLogin) -> formLogin
-                        .loginPage("/admin/login")
+                        .loginPage("/admin/login").permitAll()
                         .defaultSuccessUrl("/admin/main"))
         ;
         return http.build();

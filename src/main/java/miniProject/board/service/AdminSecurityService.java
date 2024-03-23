@@ -30,6 +30,7 @@ public class AdminSecurityService implements UserDetailsService {
         }
         Admin admin = _admin.get();
         List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
         return new User(admin.getUsername(), admin.getPassword(), authorities);
     }
